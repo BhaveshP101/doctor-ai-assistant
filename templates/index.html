@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Doctor AI Assistant</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background:#f2f4f7;
+            padding:40px;
+        }
+
+        .container{
+            max-width:800px;
+            margin:auto;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        input, textarea{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border-radius:6px;
+            border:1px solid #ccc;
+        }
+
+        button{
+            width:100%;
+            margin-top:15px;
+            padding:12px;
+            background:#2e6bd6;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#1f4ea8;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin-top:20px;
+            border-radius:8px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .select-btn{
+            margin-top:10px;
+            background:#2ecc71;
+            padding:8px 15px;
+            border:none;
+            color:white;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>🩺 Doctor AI Assistant</h1>
+
+<input id="patientName" placeholder="Patient name">
+
+<textarea id="symptoms" rows="4" placeholder="Enter patient symptoms"></textarea>
+
+<button onclick="analyzeSymptoms()">Analyze</button>
+
+<div id="results"></div>
+
+</div>
+
+
+<script>
+
+async function analyzeSymptoms(){
+
+    const symptoms = document.getElementById("symptoms").value;
+
+    const response = await fetch("/analyze-symptoms",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({symptoms:symptoms})
+    });
+
+    const data = await response.json();
+
+    const resultsDiv = document.getElementById("results");
+
+    resultsDiv.innerHTML = "";
+
+    if(!data.results || data.results.length === 0){
+        resultsDiv.innerHTML = "<p>No remedies found.</p>";
+        return;
+    }
+
+    data.results.forEach(remedy => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${remedy.medicine_name}</h3>
+            <p>${remedy.description}</p>
+            <button class="select-btn">Select Remedy</button>
+        `;
+
+        resultsDiv.appendChild(card);
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
