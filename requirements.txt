@@ -3,6 +3,8 @@ uvicorn
 sentence-transformers
 faiss-cpu
 pymupdf
-python-multipart
-sqlalchemy
-reportlab
+pytesseract
+pdf2image
+Pillow
+jinja2
+numpy
