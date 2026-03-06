@@ -50,13 +50,17 @@ else:
 
 # ---------------------------------------------------
 
-print("Chunking remedies...")
-chunks = chunk_text(medical_text)
+import pickle
 
-print(f"Total remedies detected: {len(chunks)}")
+print("Loading saved AI database...")
 
-print("Generating embeddings...")
-embeddings = get_embeddings(chunks)
+with open("data/chunks.pkl", "rb") as f:
+    chunks = pickle.load(f)
+
+with open("data/embeddings.pkl", "rb") as f:
+    embeddings = pickle.load(f)
+
+print(f"Total remedies loaded: {len(chunks)}")
 
 print("Creating FAISS index...")
 index = create_faiss_index(embeddings)
