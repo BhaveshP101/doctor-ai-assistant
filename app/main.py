@@ -16,7 +16,28 @@ app = FastAPI(
 )
 
 templates = Jinja2Templates(directory="templates")
+chunks = None
+index = None
 
+@app.on_event("startup")
+def load_ai_database():
+    global chunks, index
+
+    import pickle
+
+    print("Loading saved AI database...")
+
+    with open("data/chunks.pkl", "rb") as f:
+        chunks = pickle.load(f)
+
+    with open("data/embeddings.pkl", "rb") as f:
+        embeddings = pickle.load(f)
+
+    print(f"Total remedies loaded: {len(chunks)}")
+
+    index = create_faiss_index(embeddings)
+
+    print("AI system ready.")
 # ---------------------------------------------------
 # FILE PATHS
 # ---------------------------------------------------
