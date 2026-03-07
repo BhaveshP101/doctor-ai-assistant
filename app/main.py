@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import os
 
 from app.pdf_processor import extract_text_from_pdf, chunk_text
-from app.embedder import get_embeddings, model
+from app.embedder import model
 from app.vector_store import create_faiss_index, search_index
 
 
